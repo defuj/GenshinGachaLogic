@@ -23,6 +23,7 @@ private var res : MutableList<ModelItem> = mutableListOf()
 fun main() {
     for (i in 1..180){ startLogic("character") }
 }
+
 private fun startLogic(type: String ? = "all") {
     // mengatur hadiah gacha berdasarkan type gacha nya
     when(type){
@@ -131,7 +132,6 @@ private fun startLogic(type: String ? = "all") {
         }
     }
 }
-
 private fun characterSSR(): MutableList<ModelItem> {
     return mutableListOf(
         ModelItem("char_100","Character","Albedo","*****",false),
