@@ -1,0 +1,1 @@
+class ModelItem(var id : String, var type : String, var name : String, var ratity : String, var rateUp : Boolean)
