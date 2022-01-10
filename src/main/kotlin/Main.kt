@@ -31,7 +31,7 @@ var EVENT = 0F
 
 var items : MutableList<ModelItem> = mutableListOf()
 var resultItems : MutableList<ModelItem> = mutableListOf()
-var res : MutableList<ModelItem> = mutableListOf()
+var resultTemp : MutableList<ModelItem> = mutableListOf()
 
 // extension function with single expression function
 fun String.println() : Unit = println(this)
@@ -41,7 +41,7 @@ fun main() {
     for (i in 1..180) startLogic("weapon")
 }
 
-fun startLogic(type: String ? = "none") {
+fun startLogic(type: String? = "none") {
     // mengatur hadiah gacha berdasarkan type gacha
     when(type){
         "none" -> {
@@ -120,8 +120,8 @@ fun startLogic(type: String ? = "none") {
             "[$counter] [$pity] Mendapatkan [${rateUpItem(type).star}] ${rateUpItem(type).type} - ${rateUpItem(type).name}".println()
         }else{
             // get [result] random SSR item
-            res = whenRarity("*****").toMutableList()
-            val result = res[reloadNumber(res.size)]
+            resultTemp = whenRarity("*****").toMutableList()
+            val result = resultTemp[reloadNumber(resultTemp.size)]
             resultItems.add(result)
             // if [result] == rateUpItem : rateUp <- false
             // if [result] != rateUpItem : rateUp <- true
@@ -135,8 +135,8 @@ fun startLogic(type: String ? = "none") {
     }else{
         if(counter > 9){
             if(counter.mod(10) == 0){
-                res = whenRarity("****").toMutableList()
-                val result = res[reloadNumber(res.size)]
+                resultTemp = whenRarity("****").toMutableList()
+                val result = resultTemp[reloadNumber(resultTemp.size)]
                 resultItems.add(result)
                 "[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}".println()
                 pity+=1
@@ -359,27 +359,27 @@ fun rollInUp(total : Int? = 1, type: String? = "none"){
         val randNumber = floor(Math.random() * weight)
         var index = 0
         if(SSR < randNumber && randNumber <= EVENT){
-            res = whenEvent().toMutableList()
-            index = reloadNumber(res.size)
-            resultItems.add(res[index])
-            rateUp = res[index] != rateUpItem(type!!)
+            resultTemp = whenEvent().toMutableList()
+            index = reloadNumber(resultTemp.size)
+            resultItems.add(resultTemp[index])
+            rateUp = resultTemp[index] != rateUpItem(type!!)
         }else if(SR < randNumber && randNumber <= SSR){
-            res = whenRarity("*****").toMutableList()
-            index = reloadNumber(res.size)
-            resultItems.add(res[index])
-            rateUp = res[index] != rateUpItem(type!!)
+            resultTemp = whenRarity("*****").toMutableList()
+            index = reloadNumber(resultTemp.size)
+            resultItems.add(resultTemp[index])
+            rateUp = resultTemp[index] != rateUpItem(type!!)
         }else if(R < randNumber && randNumber <= SR){
-            res = whenRarity("****").toMutableList()
-            index = reloadNumber(res.size)
-            resultItems.add(res[index])
+            resultTemp = whenRarity("****").toMutableList()
+            index = reloadNumber(resultTemp.size)
+            resultItems.add(resultTemp[index])
         }else if(randNumber <= R){
-            res = whenRarity("*").toMutableList()
-            index = reloadNumber(res.size)
-            resultItems.add(res[index])
+            resultTemp = whenRarity("*").toMutableList()
+            index = reloadNumber(resultTemp.size)
+            resultItems.add(resultTemp[index])
         }
 
-        "[$counter] [$pity] Mendapatkan [${res[index].star}] ${res[index].type} - ${res[index].name}".println()
-        when (res[index].star) {
+        "[$counter] [$pity] Mendapatkan [${resultTemp[index].star}] ${resultTemp[index].type} - ${resultTemp[index].name}".println()
+        when (resultTemp[index].star) {
             "*****" -> pity = 1
             "****" -> pity += 1
             else -> pity += 1
