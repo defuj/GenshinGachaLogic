@@ -1,16 +1,21 @@
 import kotlin.math.floor
 
+// default setting rate
 var rRate = 97.000F
 var srRate = 2.500F
 var ssrRate = 0.500F
 var eventRate = 1.6F
 
+// default pity, counter & rateUp status
 var pity = 1
 var counter = 1
 var rateUp = false
+
+// rateUp Item
 var rateUpCharacter = ModelItem("char_119","Character","Xiao","*****",true)
 var rateUpWeapon = ModelItem("polearms_102","Weapon Polearms","Primordial Jade Winged-Spear","*****",false)
-// implement lambda expression
+
+// setup rateUp Item with implement lambda expression
 val rateUpItem : (String) -> ModelItem = {value : String ->
     when(value){
         "character" -> rateUpCharacter
@@ -27,11 +32,12 @@ var EVENT = 0F
 var items : MutableList<ModelItem> = mutableListOf()
 var resultItems : MutableList<ModelItem> = mutableListOf()
 var res : MutableList<ModelItem> = mutableListOf()
+
 // extension function with single expression function
 fun String.println() : Unit = println(this)
 
 fun main() {
-    for (i in 1..90) startLogic("character")
+    //for (i in 1..90) startLogic("character")
     for (i in 1..90) startLogic("weapon")
 }
 
