@@ -8,7 +8,7 @@ var eventRate = 1.6F
 var pity = 1
 var counter = 1
 var rateUp = false
-var rateUpItem = ModelItem("char_116","Character","Shenhe","*****",true)
+var rateUpItem = ModelItem("char_119","Character","Xiao","*****",true)
 
 var weight : Float = 0F
 var R = 0F
@@ -21,13 +21,16 @@ private var resultItems : MutableList<ModelItem> = mutableListOf()
 private var res : MutableList<ModelItem> = mutableListOf()
 
 fun main() {
-    for (i in 1..180){ startLogic("character") }
+    for (i in 1..91) startLogic("character")
 }
 
-private fun startLogic(type: String ? = "all") {
-    // mengatur hadiah gacha berdasarkan type gacha nya
+// extension function with single expression function
+fun String.println() : Unit = println(this)
+
+private fun startLogic(type: String ? = "none") {
+    // mengatur hadiah gacha berdasarkan type gacha
     when(type){
-        "all" -> {
+        "none" -> {
             items.apply {
                 addAll(characterSSR())
                 addAll(characterSR())
@@ -100,7 +103,7 @@ private fun startLogic(type: String ? = "all") {
             // after get rateUpItem
             // rateUp <- false
             rateUp = false
-            println("[$counter] [$pity] Mendapatkan [${rateUpItem.star}] ${rateUpItem.type} - ${rateUpItem.name}")
+            "[$counter] [$pity] Mendapatkan [${rateUpItem.star}] ${rateUpItem.type} - ${rateUpItem.name}".println()
         }else{
             // get [result] random SSR item
             res = whenRarity("*****").toMutableList()
@@ -109,7 +112,7 @@ private fun startLogic(type: String ? = "all") {
             // if [result] == rateUpItem : rateUp <- false
             // if [result] != rateUpItem : rateUp <- true
             rateUp = result != rateUpItem
-            println("[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}")
+            "[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}".println()
         }
 
         // after get SSR item, reset pity = 1
@@ -121,7 +124,7 @@ private fun startLogic(type: String ? = "all") {
                 res = whenRarity("****").toMutableList()
                 val result = res[reloadNumber(res.size)]
                 resultItems.add(result)
-                println("[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}")
+                "[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}".println()
                 pity+=1
                 counter+=1
             }else{
@@ -134,7 +137,6 @@ private fun startLogic(type: String ? = "all") {
 }
 private fun characterSSR(): MutableList<ModelItem> {
     return mutableListOf(
-        ModelItem("char_100","Character","Albedo","*****",false),
         ModelItem("char_100","Character","Albedo","*****",false),
         ModelItem("char_101","Character","Arataki Itto","*****",false),
         ModelItem("char_102","Character","Aloy","*****",false),
@@ -151,39 +153,43 @@ private fun characterSSR(): MutableList<ModelItem> {
         ModelItem("char_113","Character","Qiqi","*****",false),
         ModelItem("char_114","Character","Raiden Shogun","*****",false),
         ModelItem("char_115","Character","Sangonomiya Kokomi","*****",false),
-        ModelItem("char_116","Character","Shenhe","*****",true),
+        ModelItem("char_116","Character","Shenhe","*****",false),
         ModelItem("char_117","Character","Tartaglia","*****",false),
         ModelItem("char_118","Character","Venti","*****",false),
-        ModelItem("char_119","Character","Yoimiya","*****",false),
-        ModelItem("char_120","Character","Zhongli","*****",false)
+        // RateUp Item
+        ModelItem("char_119","Character","Xiao","*****",true),
+        ModelItem("char_120","Character","Yoimiya","*****",false),
+        ModelItem("char_121","Character","Zhongli","*****",false)
     )
 }
 private fun characterSR(): MutableList<ModelItem> {
     return mutableListOf(
-        ModelItem("char_121","Character","Amber","****",false),
-        ModelItem("char_122","Character","Barbara","****",false),
-        ModelItem("char_123","Character","Beidou","****",false),
-        ModelItem("char_124","Character","Bennet","****",false),
-        ModelItem("char_125","Character","Chongyun","****",false),
-        ModelItem("char_126","Character","Diona","****",false),
-        ModelItem("char_127","Character","Fischl","****",false),
-        ModelItem("char_128","Character","Gorou","****",false),
-        ModelItem("char_129","Character","Kaeya","****",false),
-        ModelItem("char_130","Character","Kujou Sara","****",false),
-        ModelItem("char_131","Character","Lisa","****",false),
-        ModelItem("char_132","Character","Ningguang","****",false),
-        ModelItem("char_133","Character","Noelle","****",false),
-        ModelItem("char_134","Character","Razor","****",false),
-        ModelItem("char_135","Character","Rosaria","****",false),
-        ModelItem("char_136","Character","Sayu","****",false),
-        ModelItem("char_137","Character","Sucrose","****",false),
-        ModelItem("char_138","Character","Thoma","****",false),
-        ModelItem("char_139","Character","Xiangling","****",false),
-        ModelItem("char_140","Character","Xiao","****",false),
+        ModelItem("char_122","Character","Amber","****",false),
+        ModelItem("char_123","Character","Barbara","****",false),
+        ModelItem("char_124","Character","Beidou","****",false),
+        ModelItem("char_125","Character","Bennet","****",false),
+        // RateUp Item
+        ModelItem("char_126","Character","Chongyun","****",true),
+        ModelItem("char_127","Character","Diona","****",false),
+        ModelItem("char_128","Character","Fischl","****",false),
+        ModelItem("char_129","Character","Gorou","****",false),
+        ModelItem("char_130","Character","Kaeya","****",false),
+        ModelItem("char_131","Character","Kujou Sara","****",false),
+        ModelItem("char_132","Character","Lisa","****",false),
+        // RateUp Item
+        ModelItem("char_133","Character","Ningguang","****",true),
+        ModelItem("char_134","Character","Noelle","****",false),
+        ModelItem("char_135","Character","Razor","****",false),
+        ModelItem("char_136","Character","Rosaria","****",false),
+        ModelItem("char_137","Character","Sayu","****",false),
+        ModelItem("char_138","Character","Sucrose","****",false),
+        ModelItem("char_139","Character","Thoma","****",false),
+        ModelItem("char_140","Character","Xiangling","****",false),
         ModelItem("char_141","Character","Xinqiu","****",false),
         ModelItem("char_142","Character","Xinyan","****",false),
         ModelItem("char_143","Character","Yanfei","****",false),
-        ModelItem("char_144","Character","Yun Jin","****",false)
+        // RateUp Item
+        ModelItem("char_144","Character","Yun Jin","****",true)
     )
 }
 private fun weaponSSR() : MutableList<ModelItem> {
@@ -358,7 +364,7 @@ private fun rollInUp(total : Int ? = 1){
             resultItems.add(res[index])
         }
 
-        println("[$counter] [$pity] Mendapatkan [${res[index].star}] ${res[index].type} - ${res[index].name}")
+        "[$counter] [$pity] Mendapatkan [${res[index].star}] ${res[index].type} - ${res[index].name}".println()
         when (res[index].star) {
             "*****" -> pity = 1
             "****" -> pity += 1
