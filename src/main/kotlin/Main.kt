@@ -16,8 +16,8 @@ var rateUpCharacter = ModelItem("char_119","Character","Xiao","*****",true)
 var rateUpWeapon = ModelItem("polearms_102","Weapon Polearms","Primordial Jade Winged-Spear","*****",false)
 
 // setup rateUp Item with implement lambda expression
-val rateUpItem : (String) -> ModelItem = {value : String ->
-    when(value){
+val rateUpItem : (String) -> ModelItem = {
+    when(it){
         "character" -> rateUpCharacter
         else -> rateUpWeapon
     }
@@ -38,7 +38,7 @@ fun String.println() : Unit = println(this)
 
 fun main() {
     //for (i in 1..90) startLogic("character")
-    for (i in 1..90) startLogic("weapon")
+    for (i in 1..180) startLogic("weapon")
 }
 
 fun startLogic(type: String ? = "none") {
