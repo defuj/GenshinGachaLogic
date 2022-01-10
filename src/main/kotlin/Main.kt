@@ -8,7 +8,15 @@ var eventRate = 1.6F
 var pity = 1
 var counter = 1
 var rateUp = false
-var rateUpItem = ModelItem("char_119","Character","Xiao","*****",true)
+var rateUpCharacter = ModelItem("char_119","Character","Xiao","*****",true)
+var rateUpWeapon = ModelItem("polearms_102","Weapon Polearms","Primordial Jade Winged-Spear","*****",false)
+// implement lambda expression
+val rateUpItem : (String) -> ModelItem = {value : String ->
+    when(value){
+        "character" -> rateUpCharacter
+        else -> rateUpWeapon
+    }
+}
 
 var weight : Float = 0F
 var R = 0F
@@ -16,18 +24,18 @@ var SR = 0F
 var SSR = 0F
 var EVENT = 0F
 
-private var items : MutableList<ModelItem> = mutableListOf()
-private var resultItems : MutableList<ModelItem> = mutableListOf()
-private var res : MutableList<ModelItem> = mutableListOf()
-
-fun main() {
-    for (i in 1..91) startLogic("character")
-}
-
+var items : MutableList<ModelItem> = mutableListOf()
+var resultItems : MutableList<ModelItem> = mutableListOf()
+var res : MutableList<ModelItem> = mutableListOf()
 // extension function with single expression function
 fun String.println() : Unit = println(this)
 
-private fun startLogic(type: String ? = "none") {
+fun main() {
+    for (i in 1..90) startLogic("character")
+    for (i in 1..90) startLogic("weapon")
+}
+
+fun startLogic(type: String ? = "none") {
     // mengatur hadiah gacha berdasarkan type gacha
     when(type){
         "none" -> {
@@ -99,11 +107,11 @@ private fun startLogic(type: String ? = "none") {
         // rateUp == true, definitely get rateUpItem
         // rateUp == false, get random SSR item
         if(rateUp){
-            resultItems.add(rateUpItem)
+            resultItems.add(rateUpItem(type!!))
             // after get rateUpItem
             // rateUp <- false
             rateUp = false
-            "[$counter] [$pity] Mendapatkan [${rateUpItem.star}] ${rateUpItem.type} - ${rateUpItem.name}".println()
+            "[$counter] [$pity] Mendapatkan [${rateUpItem(type).star}] ${rateUpItem(type).type} - ${rateUpItem(type).name}".println()
         }else{
             // get [result] random SSR item
             res = whenRarity("*****").toMutableList()
@@ -111,7 +119,7 @@ private fun startLogic(type: String ? = "none") {
             resultItems.add(result)
             // if [result] == rateUpItem : rateUp <- false
             // if [result] != rateUpItem : rateUp <- true
-            rateUp = result != rateUpItem
+            rateUp = result != rateUpItem(type!!)
             "[$counter] [$pity] Mendapatkan [${result.star}] ${result.type} - ${result.name}".println()
         }
 
@@ -128,14 +136,14 @@ private fun startLogic(type: String ? = "none") {
                 pity+=1
                 counter+=1
             }else{
-                rollInUp()
+                rollInUp(1, type)
             }
         }else{
-            rollInUp()
+            rollInUp(1, type)
         }
     }
 }
-private fun characterSSR(): MutableList<ModelItem> {
+fun characterSSR(): MutableList<ModelItem> {
     return mutableListOf(
         ModelItem("char_100","Character","Albedo","*****",false),
         ModelItem("char_101","Character","Arataki Itto","*****",false),
@@ -162,7 +170,7 @@ private fun characterSSR(): MutableList<ModelItem> {
         ModelItem("char_121","Character","Zhongli","*****",false)
     )
 }
-private fun characterSR(): MutableList<ModelItem> {
+fun characterSR(): MutableList<ModelItem> {
     return mutableListOf(
         ModelItem("char_122","Character","Amber","****",false),
         ModelItem("char_123","Character","Barbara","****",false),
@@ -192,7 +200,7 @@ private fun characterSR(): MutableList<ModelItem> {
         ModelItem("char_144","Character","Yun Jin","****",true)
     )
 }
-private fun weaponSSR() : MutableList<ModelItem> {
+fun weaponSSR() : MutableList<ModelItem> {
     return mutableListOf(
         // Bow
         ModelItem("bows_100","Weapon Bow","Polar Star","*****",false),
@@ -214,7 +222,7 @@ private fun weaponSSR() : MutableList<ModelItem> {
         // Polearms
         ModelItem("polearms_100","Weapon Polearms","Engulfing Lightning","*****",false),
         ModelItem("polearms_101","Weapon Polearms","Skyward Spine","*****",false),
-        ModelItem("polearms_102","Weapon Polearms","Primordial Jade Winged-Spear","*****",false),
+        ModelItem("polearms_102","Weapon Polearms","Primordial Jade Winged-Spear","*****",true),
         ModelItem("polearms_103","Weapon Polearms","Calamity Queller","*****",false),
         ModelItem("polearms_104","Weapon Polearms","Staff of Homa","*****",false),
         ModelItem("polearms_105","Weapon Polearms","Vortex Vanquisher","*****",false),
@@ -227,7 +235,7 @@ private fun weaponSSR() : MutableList<ModelItem> {
         ModelItem("sword_105","Weapon Sword","Primordial Jade Cutter","*****",false),
     )
 }
-private fun weaponSR() : MutableList<ModelItem> {
+fun weaponSR() : MutableList<ModelItem> {
     return mutableListOf(
         // Bow
         ModelItem("bows_105","Weapon Bow","Alley Hunter","****",false),
@@ -304,7 +312,7 @@ private fun weaponSR() : MutableList<ModelItem> {
         ModelItem("sword_119","Weapon Sword","Blackcliff Longsword","****",false),
     )
 }
-private fun weaponR() : MutableList<ModelItem> {
+fun weaponR() : MutableList<ModelItem> {
     return mutableListOf(
         // Bow
         ModelItem("bows_120","Weapon Bow","Raven Bow","*",false),
@@ -340,7 +348,7 @@ private fun weaponR() : MutableList<ModelItem> {
         ModelItem("sword_125","Weapon Sword","Traveler's Handy Sword","*",false),
     )
 }
-private fun rollInUp(total : Int ? = 1){
+fun rollInUp(total : Int? = 1, type: String? = "none"){
     for(i in 1..total!!){
         val randNumber = floor(Math.random() * weight)
         var index = 0
@@ -348,12 +356,12 @@ private fun rollInUp(total : Int ? = 1){
             res = whenEvent().toMutableList()
             index = reloadNumber(res.size)
             resultItems.add(res[index])
-            rateUp = res[index] != rateUpItem
+            rateUp = res[index] != rateUpItem(type!!)
         }else if(SR < randNumber && randNumber <= SSR){
             res = whenRarity("*****").toMutableList()
             index = reloadNumber(res.size)
             resultItems.add(res[index])
-            rateUp = res[index] != rateUpItem
+            rateUp = res[index] != rateUpItem(type!!)
         }else if(R < randNumber && randNumber <= SR){
             res = whenRarity("****").toMutableList()
             index = reloadNumber(res.size)
@@ -373,6 +381,6 @@ private fun rollInUp(total : Int ? = 1){
         counter += 1
     }
 }
-private fun reloadNumber(length : Int) : Int = floor(Math.random() * length).toInt()
-private fun whenEvent(): List<ModelItem> = items.filter { it.rateUp }.toList()
-private fun whenRarity(rarity : String): List<ModelItem> = items.filter { it.star == rarity }.toList()
+fun reloadNumber(length : Int) : Int = floor(Math.random() * length).toInt()
+fun whenEvent(): List<ModelItem> = items.filter { it.rateUp }.toList()
+fun whenRarity(rarity : String): List<ModelItem> = items.filter { it.star == rarity }.toList()
